@@ -19,7 +19,7 @@ APP_NAME = "crunchy-userinit"
 K8S_API_NS = "crunchy-userinit.ramblurr.github.com"
 LABEL_ENABLED = f"{K8S_API_NS}/enabled"
 LABEL_SUPERUSER = f"{K8S_API_NS}/superuser"
-
+CRUI_WATCH_NAMESPACE = os.environ.get("WATCH_NAMESPACE", "default")
 DEV_MODE = os.environ.get("DEV_MODE", "false").lower() in (
     "true",
     "1",
