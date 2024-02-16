@@ -39,7 +39,11 @@ async def configure(settings: kopf.OperatorSettings, **_):
         prefix=K8S_API_NS,
         key="last-handled-configuration",
     )
-    await config.load_kube_config()
+    if DEV_MODE:
+        logging.warning("running in dev mode")
+        await config.load_kube_config()
+    else:
+        config.load_incluster_config()
 
 
 @kopf.on.update(
