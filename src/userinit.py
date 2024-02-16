@@ -19,14 +19,16 @@ APP_NAME = "crunchy-userinit"
 K8S_API_NS = "crunchy-userinit.ramblurr.github.com"
 LABEL_ENABLED = f"{K8S_API_NS}/enabled"
 LABEL_SUPERUSER = f"{K8S_API_NS}/superuser"
-CRUI_WATCH_NAMESPACE = os.environ.get("WATCH_NAMESPACE", "default")
-DEV_MODE = os.environ.get("DEV_MODE", "false").lower() in (
+CRUI_WATCH_NAMESPACE = os.environ.get("CRUI_WATCH_NAMESPACE", "default")
+truthy = (
     "true",
     "1",
     "yes",
     "on",
     "y",
 )
+DEV_MODE = os.environ.get("DEV_MODE", "false").lower() in truthy
+logger = logging.getLogger(APP_NAME)
 
 #######################
 # Lifecycle Functions #
@@ -40,7 +42,7 @@ async def configure(settings: kopf.OperatorSettings, **_):
         key="last-handled-configuration",
     )
     if DEV_MODE:
-        logging.warning("running in dev mode")
+        logger.warning("running in dev mode")
         await config.load_kube_config()
     else:
         config.load_incluster_config()
@@ -77,7 +79,7 @@ async def on_pguser_secret_created(body, **kwargs):
             f"superuser label not found on cluster, but {APP_NAME} is enabled. Please check the documentation Please check the documentation. cluster={cluster_name} ns={cluster_ns}",
             delay=60,
         )
-    logging.info(
+    logger.info(
         f"found pguser to manage. secret_name={secret_name}, cluster_name={cluster_name} ns={cluster_ns} superuser={superuser}"
     )
     data = secret.get("data")
@@ -90,7 +92,7 @@ async def on_pguser_secret_created(body, **kwargs):
         raise kopf.TemporaryError(err_msg.format("role_name"), delay=30)
 
     if role_name == superuser:
-        logging.info(f"skipping {role_name} as it is the superuser")
+        logger.info(f"skipping {role_name} as it is the superuser")
         return
 
     conn = await open_cluster_connection(cluster_ns, cluster_name, superuser)
@@ -132,16 +134,16 @@ async def change_owner(
     alter_sql = f'ALTER DATABASE "{database_name}" OWNER TO "{role_name}"'
     current_owner = await conn.fetchval(check_owner_sql, database_name)
     if current_owner == role_name:
-        logging.info(
+        logger.info(
             f"current owner of {database_name} is {current_owner}. nothing to do."
         )
         return
     else:
-        logging.info(
+        logger.info(
             f"changing owner of db={database_name} from old_owner={current_owner} to new_ownwer={role_name} with '{alter_sql}'"
         )
         await conn.execute(alter_sql)
-    logging.info(
+    logger.info(
         f"database owner changed successfully: db={database_name} new_owner={role_name} old_owner={current_owner}"
     )
 

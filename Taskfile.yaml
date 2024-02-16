@@ -12,7 +12,7 @@ vars:
 tasks:
   dev:run:
     cmd: |
-      kopf run --dev -n database userinit.py
+      kopf run --dev -n database src/userinit.py
   dev:reset:
     cmd: |
       kubectl get secrets -n database -o jsonpath="{range .items[?(@.metadata.annotations.{{.configEscapedAnnotation}})]}{.metadata.name}{'\n'}{end}" | xargs -I {} kubectl -n database annotate secrets '{}' {{.configAnnotation}}-

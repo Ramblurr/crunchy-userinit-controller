@@ -11,4 +11,9 @@ check_vars()
 }
 
 check_vars CRUI_WATCH_NAMESPACE
-kopf run --namespace "${CRUI_WATCH_NAMESPACE}" /src/userinit.py --verbose
+
+if [ "${CRUI_DEBUG}" = "true" ]; then
+  kopf run --namespace "${CRUI_WATCH_NAMESPACE}" /src/userinit.py --verbose
+else
+  kopf run --namespace "${CRUI_WATCH_NAMESPACE}" /src/userinit.py
+fi
