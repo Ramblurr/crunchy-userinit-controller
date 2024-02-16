@@ -5,20 +5,71 @@
 
 _A simple k8s controller to assist in creating users for the [crunchydata postgres operator][crunchy]._
 
-[![License](https://img.shields.io/github/license/ramblurr/crunchy-userinit-controller?style=for-the-badge)](https://opensource.org/licenses/AGPL-3.0)
+[![License](https://img.shields.io/github/license/ramblurr/crunchy-userinit-controller?style=for-the-badge&v1)](https://spdx.org/licenses/AGPL-3.0-or-later.html)
+
 </div>
 
 
 ## What?
 
+This is a k8s controller that exists to run `ALTER DATABASE "{database_name}" OWNER TO "{user_name}"`.
+
+This controller should be deployed alongside a [crunchydata postgres-operator][crunchy] `PostgresCluster` instance.
+
+It will watch for `pguser` secrets created by the PostgresCluster (due to you adding [users with databases]( https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials/basic-setup/user-management) to the cluster instance).
+
+When a pguser secret is detected it will open up the secret, pull out the username and dbname, then using superuser creds, it will connect to the database and execute the above `ALTER` statement.
+
 ## Why?
 
-## Usage
+🤦
+
+## How?
 
 ```
 helm repo add crunchy-userinit-controller https://ramblurr.github.io/crunchy-userinit-controller
 helm repo update
 helm install -n YOUR_DB_NS crunchy-userinit-controller/crunchy-userinit-controller
+```
+
+You must label annotate your `PostgresCluster` so the userinit-controller can find it:
+
+``` yaml
+---
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: "app-db"
+  namespace: database
+spec:
+  metadata:
+    labels:
+      # This label is required for the userinit-controller to activate
+      crunchy-userinit.ramblurr.github.com/enabled: "true"
+      # This label is required to tell the userinit-controller which user is the the superuser
+      crunchy-userinit.ramblurr.github.com/superuser: "dbroot"
+  postgresVersion: 16
+
+  ... snip ...
+
+  users:
+  
+    # This is the useruser that will be used by the userinit-controller to execute the SQL
+    - name: "dbroot"
+      databases:
+        - "postgres"
+      options: "SUPERUSER"
+      password:
+        type: AlphaNumeric
+
+    # This is a user that will be affected by the userinit-controller
+    - name: "nextcloud"
+      databases:
+        - "nextcloud"
+      password:
+        type: AlphaNumeric
+
+  ... snip ...
 ```
 
 ## Contributing
