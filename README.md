@@ -1,6 +1,4 @@
 <div align="center">
-
-
 # crunchy-userinit-controller
 
 _A simple k8s controller to assist in creating users for the [crunchydata postgres operator][crunchy]._
@@ -10,7 +8,6 @@ _A simple k8s controller to assist in creating users for the [crunchydata postgr
 
 ## Usage
 
-`docker pull ghcr.io/ramblurr/crunchy-userinit-controller:main`
 
 
 
