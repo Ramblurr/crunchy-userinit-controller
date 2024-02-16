@@ -9,6 +9,7 @@
     python311Packages.asyncpg
     python311Packages.isort
     python311Packages.black
+    chart-testing
     poetry
     watchexec
     zsh

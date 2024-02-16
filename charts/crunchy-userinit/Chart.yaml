@@ -1,0 +1,10 @@
+---
+apiVersion: v2
+name: crunchy-userinit-controller
+description: Installs crunchy-userinit-controller
+type: application
+version: 0.0.1
+appVersion: "0.0.1"
+maintainers:
+  - name: ramblurr
+    email: unnamedrambler@gmail.com
