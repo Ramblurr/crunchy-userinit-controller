@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: ghcr.io/ramblurr/crunchy-userinit-controller
   pullPolicy: IfNotPresent
-  tag: "main@sha256:59c7e85183cbd9f7e8f3d959695d05d9a361aeafeaa25a930e7dc880115c876a"
+  tag: "main@sha256:42e94f30b3e887b0d2fc3cdd144670adc5a19a2e3dc4ca5e01572f0ced5b7ff5"
 
 ## Additional environment variables to apply to the main pod
 extraEnv: []
