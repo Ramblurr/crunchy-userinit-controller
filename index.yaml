@@ -3,6 +3,19 @@ entries:
   crunchy-userinit-controller:
   - apiVersion: v2
     appVersion: 0.0.1
+    created: "2024-02-17T07:15:05.676120678Z"
+    description: Installs crunchy-userinit-controller
+    digest: 8c5ca6bba1a9c63bd6d93cb961b3447407af119ac100657c10550a12ee51ab74
+    maintainers:
+    - email: unnamedrambler@gmail.com
+      name: ramblurr
+    name: crunchy-userinit-controller
+    type: application
+    urls:
+    - https://github.com/Ramblurr/crunchy-userinit-controller/releases/download/0.0.4/crunchy-userinit-controller-0.0.4.tgz
+    version: 0.0.4
+  - apiVersion: v2
+    appVersion: 0.0.1
     created: "2024-02-16T15:02:05.12285943Z"
     description: Installs crunchy-userinit-controller
     digest: 7060310aa97bed21e3520ecacf861937972228166d970131a305e0c4f9adfe55
@@ -40,4 +53,4 @@ entries:
     urls:
     - https://github.com/Ramblurr/crunchy-userinit-controller/releases/download/crunchy-userinit-controller-0.0.1/crunchy-userinit-controller-0.0.1.tgz
     version: 0.0.1
-generated: "2024-02-16T15:02:05.12287573Z"
+generated: "2024-02-17T07:15:05.676139333Z"
