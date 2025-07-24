@@ -1,3 +1,10 @@
+As I no longer in the k8s@home space, the community has taken this project over.
+
+It has moved to:
+
+https://github.com/DrummyFloyd/crunchy-userinit-controller
+
+------
 
 <div align="center">
 
